@@ -1,0 +1,113 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; 
+  background-color: black;
+}
+
+.interfaz-global {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+.seccion-principal {
+  flex: 1;    
+  display: flex;    
+  justify-content: center; 
+  align-items: center;    
+  padding: 20px;
+}
+
+.contenedor {
+  background-color: rgb(17, 17, 17);
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 2px solid rgb(185, 185, 185);  
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.623);
+  color: white;
+}
+
+input {
+  padding: 10px;
+  margin-left: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  margin-bottom: 10px;
+  background-color: #131313;
+  color: white;
+  font-family:'Times New Roman', Times, serif;
+}
+
+select {
+  padding: 10px;
+  margin-left: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  margin-bottom: 20px;
+  background-color: #131313;
+  color: white;
+  font-family:'Times New Roman', Times, serif;
+}
+
+label {
+  display: inline-block;
+  width: 200px;
+  margin-left: 40px;
+  font-family:'Times New Roman', Times, serif;
+}
+
+.grupo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h1, h2 {
+  text-align: center;
+  color: white;
+  font-family:Arial, Helvetica, sans-serif;
+  margin:10px;
+}
+
+.boton {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  margin-bottom: 20px;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #9c9c9c;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+button:hover {
+  padding: 10px 20px;
+  background-color: #575757;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #111111;
+  border-top: 1px solid #3b3b3b;
+  color: white;
+  font-family:Arial, Helvetica, sans-serif;
+}
