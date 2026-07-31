@@ -1,8 +1,28 @@
-function Formulario() {
+    import { useState } from "react"
+function Formulario({ siguiente }) {
+    const [foto, setFoto] = useState(null)
+    const [nombre, setNombre] = useState("")
+    const [edad, setEdad] = useState("")
+    const [ciudad, setCiudad] = useState("")
+    const [correo, setCorreo] = useState("")
+    const [programa, setPrograma] = useState("")
+    const [ficha, setFicha] = useState("")
+    const [jornada, setJornada] = useState("Mañana")
+
+    //Función botón continuar
+    const continuar = (e) =>{
+
+        e.preventDefault();
+        alert ("Los datos fueron ingresados correctamente");
+        if (siguiente){
+            siguiente();
+        }
+    }
+
     return (
         <div className="formulario">
-            <form>
-                <h2>Registro de Aprendices</h2>
+            <form onSubmit = {continuar}>
+                <h2>Datos Personales</h2>
 
                 <div className="grupo">
                     <label>Fotografía</label>
