@@ -1,10 +1,10 @@
 import { useState } from "react"
 function FormularioExperiencia({ anterior }){
-    const [empresa, setEmpresa] = useState("") 
+    /*const [empresa, setEmpresa] = useState("") 
     const [cargo, setCargo] = useState("")
     const [experiencia, setExperiencia] = useState("")
     const [Funciones, setFunciones] = useState("")
-    const [habilidades, setHabilidades] = useState("")
+    const [habilidades, setHabilidades] = useState("")*/
     
     const continuar = (e) => {
         e.preventDefault();

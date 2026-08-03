@@ -1,10 +1,10 @@
 import { useState } from "react"
 function FormularioAcademico({ anterior, siguiente }){
-    const [nformacion, setNformacion] = useState("Bachiller") 
+    /*const [nformacion, setNformacion] = useState("Bachiller") 
     const [institucion, setInstitucion] = useState("")
     const [titulo, setTitulo] = useState("")
     const [añoG, setAñoG] = useState("")
-    const [cursos, setCursos] = useState("")
+    const [cursos, setCursos] = useState("")*/
     
     const continuar = (e) => {
         e.preventDefault();

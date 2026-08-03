@@ -12,6 +12,35 @@ function App() {
 
   const [paso, setPaso] = useState(1);
 
+  const [persona, setPersona] = useState ({
+
+    //Datos academicos
+    foto:null,
+    nombre: "",
+    edad: "",
+    ciudad: "",
+    correo: "",
+    programa: "",
+    ficha: "",
+    jornada: "Mañana",
+
+    //Datos de estudios
+    nivel: "",
+    institucion: "",
+    titulo: "",
+    anio: "",
+    cursos: "",
+
+    //Datos de experiencia
+    empresa: "",
+    cargo: "",
+    experiencia: "",
+    funciones: "",
+    habilidades: "",
+
+
+  })
+
   return (
     <>
   <div className="interfaz-global">
@@ -21,21 +50,28 @@ function App() {
         <div className="contenedor">
           {
             paso == 1 && (
-            <Formulario siguiente = {() => setPaso(2)}/>
+              <Formulario 
+              persona = {persona}
+              setpersona = {setPersona}
+              siguiente = {() => setPaso(2)}
+              />
           )}
           
           {paso === 2 && (
               <FormularioAcademico 
+                persona = {persona}
+                setpersona = {setPersona}
                 anterior ={() => setPaso(1)} 
                 siguiente ={() => setPaso(3)} 
               />
-
             )}
           
           {paso === 3 && (
               <FormularioExperiencia 
+                persona = {persona}
+                setpersona = {setPersona}
                 anterior ={() => setPaso(2)}
-              />
+                />
             )}
         </div>
       </main>

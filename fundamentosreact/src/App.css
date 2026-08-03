@@ -54,6 +54,18 @@ select {
   font-family:'Times New Roman', Times, serif;
 }
 
+textarea {
+  padding: 10px;
+  margin-left: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  margin-bottom: 20px;
+  background-color: #131313;
+  color: white;
+  font-family:'Times New Roman', Times, serif;
+}
+
 label {
   display: inline-block;
   width: 200px;
