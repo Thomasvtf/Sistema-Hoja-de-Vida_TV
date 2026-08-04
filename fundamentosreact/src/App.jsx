@@ -6,6 +6,7 @@ import Formulario from './components/formulario'
 import Footer from './components/footer' 
 import FormularioAcademico from './components/formularioAcademico' 
 import FormularioExperiencia from './components/formularioExperiencia' 
+import Vista from './components/vista'
 
 
 function App() {
@@ -71,8 +72,15 @@ function App() {
                 persona = {persona}
                 setpersona = {setPersona}
                 anterior ={() => setPaso(2)}
-                />
+                siguiente ={() => setPaso(4)}
+              />
             )}
+
+          {paso === 4 && (
+            <Vista
+              persona = {persona}
+            />
+          )}
         </div>
       </main>
      

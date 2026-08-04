@@ -1,4 +1,4 @@
-function FormularioExperiencia({ persona, setpersona, anterior }){
+function FormularioExperiencia({ persona, setpersona, anterior, siguiente }){
     /*const [empresa, setEmpresa] = useState("") 
     const [cargo, setCargo] = useState("")
     const [experiencia, setExperiencia] = useState("")
@@ -8,6 +8,9 @@ function FormularioExperiencia({ persona, setpersona, anterior }){
     const continuar = (e) => {
         e.preventDefault();
         alert("Registro completado correctamente")
+        if (siguiente){
+            siguiente();
+        }
     }
 
     return (
@@ -30,7 +33,7 @@ function FormularioExperiencia({ persona, setpersona, anterior }){
                 </div>
                 <div className="grupo">
                     <label>Tiempo de Experiencia</label>
-                    <input type="number" placeholder="1 año"
+                    <input type="text" placeholder="1 año"
                         value={persona.experiencia}
                         onChange={(e) => setpersona({...persona, experiencia: e.target.value})}/>
                 </div>

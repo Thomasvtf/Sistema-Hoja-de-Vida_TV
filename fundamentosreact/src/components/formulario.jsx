@@ -26,7 +26,13 @@ function Formulario({ persona, setpersona, siguiente }) {
                 <div className="grupo">
                     <label>Fotografía</label>
                     <input type="file" accept="image/*"
-                    onChange = {(e) => setpersona({...persona, foto: e.target.files[0]})}/>
+                    onChange={(e) => {
+                        const archivo = e.target.files[0];
+                        if (archivo) {
+                            setpersona({...persona,foto: URL.createObjectURL(archivo)});
+                        }
+                    }}
+                />
                 </div>
                 <div className="grupo">
                     <label>Nombre completo</label>
