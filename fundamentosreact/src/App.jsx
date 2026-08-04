@@ -25,7 +25,7 @@ function App() {
     jornada: "Mañana",
 
     //Datos de estudios
-    nivel: "",
+    nivel: "Bachiller",
     institucion: "",
     titulo: "",
     anio: "",
