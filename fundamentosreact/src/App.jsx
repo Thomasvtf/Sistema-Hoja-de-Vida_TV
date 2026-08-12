@@ -30,7 +30,7 @@ function App() {
     institucion: "",
     titulo: "",
     anio: "",
-    cursos: "",
+    cursos: [],
 
     //Datos de experiencia
     empresa: "",
