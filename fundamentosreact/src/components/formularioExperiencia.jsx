@@ -1,127 +1,175 @@
-import { useState } from "react"
-function FormularioExperiencia({ persona, setpersona, anterior, siguiente }){
-    /*const [empresa, setEmpresa] = useState("") 
-    const [cargo, setCargo] = useState("")
-    const [experiencia, setExperiencia] = useState("")
-    const [Funciones, setFunciones] = useState("")
-    const [habilidades, setHabilidades] = useState("")*/
-    
-    const [nuevaHabilidad,setNuevaHabilidad] = useState("");
+import { useState } from "react";
+import Modal from "./Modal"; // Asegúrate de ajustar la ruta de tu componente Modal
 
-    //Agregar curso
-    const agregarHabilidad = () => {
+function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
+    //controlar el Modal
+    const [modalAbierto, setModalAbierto] = useState(false);
 
-        if (nuevaHabilidad.trim() === "") { //Metodo .trimm() borra los espacios vacíos al principio y al final de un texto
+    const [empresa, setEmpresa] = useState("");
+    const [cargo, setCargo] = useState("");
+    const [experiencia, setExperiencia] = useState("");
+    const [funciones, setFunciones] = useState("");
+    const [habilidadesLocal, setHabilidadesLocal] = useState(""); // Guarda el texto temporal de habilidades
 
-            alert("Ingrese el nombre del curso: ");
-            
+    //guardar toda la experiencia
+    const guardarExperienciaTotal = (e) => {
+        e.preventDefault(); // Previene que el formulario del modal recargue la página
+
+        if (empresa.trim() === "" || cargo.trim() === "") {
+            alert("Por favor ingrese al menos la Empresa y el Cargo.");
             return;
-
         }
-        
-        setpersona ({
-            ...persona,
-            habilidades: [ 
-                ...persona.habilidades,
-                nuevaHabilidad
-            ]
 
+        //objeto de experiencia laboral
+        const nuevaExperiencia = {
+            empresa: empresa.trim(),
+            cargo: cargo.trim(),
+            tiempo: experiencia.trim(),
+            funciones: funciones.trim(),
+            habilidades: habilidadesLocal.trim() 
+        };
+
+        setpersona({
+            ...persona,
+            experiencias: [
+                ...(persona.experiences || persona.experiencias || []),
+                nuevaExperiencia
+            ]
         });
 
-            // Limpiar el campo
-            setNuevaHabilidad("");
-    };
-    
-    //eliminar curso
-    const eliminarHabilidad = (indice) => {
+        setEmpresa("");
+        setCargo("");
+        setExperiencia("");
+        setFunciones("");
+        setHabilidadesLocal("");
 
-        const habilidadesActualizadas = persona.habilidades.filter(
+        // Cerrar el modal
+        setModalAbierto(false);
+    };
+
+    // Eliminar experiencia 
+    const eliminarExperiencia = (indice) => {
+        const experienciasActualizadas = (persona.experiencias || []).filter(
             (_, i) => i !== indice
         );
 
         setpersona({
             ...persona,
-            habilidades: habilidadesActualizadas
-        })
+            experiencias: experienciasActualizadas
+        });
     };
 
     const continuar = (e) => {
         e.preventDefault();
-        alert("Registro completado correctamente")
-        if (siguiente){
+        if ((persona.experiencias || []).length === 0) {
+            alert("Por favor agregue al menos una experiencia laboral antes de continuar.");
+            return;
+        }
+        alert("Registro completado correctamente");
+        if (siguiente) {
             siguiente();
         }
-    }
+    };
 
     return (
         <div className="formulario">
-            <form onSubmit={continuar}>
-                <h2>Datos</h2>
+            <h2>Experiencia Laboral</h2>
+                <div className="botones">
+                    <button 
+                        type="button" 
+                        className="button" 
+                        onClick={() => setModalAbierto(true)}
+                    >
+                        + Añadir Experiencia Laboral
+                    </button>
+                </div>
+     
+            {/*Modal*/}
+            <Modal 
+                isOpen={modalAbierto} 
+                onClose={() => setModalAbierto(false)} 
+                titulo="Registrar Experiencia"
+            >
+                <form onSubmit={guardarExperienciaTotal}>
+                    <div className="grupo">
+                        <label>Empresa</label>
+                        <input 
+                            type="text" 
+                            placeholder="Nombre de la empresa" 
+                            className="input"
+                            value={empresa}
+                            onChange={(e) => setEmpresa(e.target.value)}
+                        />
+                    </div>
+                    <div className="grupo">
+                        <label>Cargo</label>
+                        <input 
+                            type="text" 
+                            placeholder="Cargo desempeñado" 
+                            className="input"
+                            value={cargo}
+                            onChange={(e) => setCargo(e.target.value)}
+                        />
+                    </div>
+                    <div className="grupo">
+                        <label>Tiempo de Experiencia</label>
+                        <input 
+                            type="text" 
+                            placeholder="Ej: 1 año" 
+                            className="input"
+                            value={experiencia}
+                            onChange={(e) => setExperiencia(e.target.value)}
+                        />
+                    </div>
+                    <div className="grupo">
+                        <label>Funciones Desempeñadas</label>
+                        <textarea  
+                            placeholder="Describa las funciones realizadas." 
+                            className="input"
+                            value={funciones}
+                            onChange={(e) => setFunciones(e.target.value)}
+                        ></textarea>
+                    </div>
+                    <div className="grupo">
+                        <label>Habilidades Técnicas</label>
+                        <input  
+                            placeholder="HTML, CSS, JavaScript..." 
+                            className="input"
+                            value={habilidadesLocal}
+                            onChange={(e) => setHabilidadesLocal(e.target.value)}
+                        />
+                    </div>
 
-                <div className="grupo">
-                    <label>Empresa</label>
-                    <input type="text" placeholder="Nombre de la empresa" className="input"
-                    value={persona.empresa}
-                    onChange={(e) => setpersona({...persona, empresa: e.target.value})}
-                    />
-                </div>
-                <div className="grupo">
-                    <label>Cargo</label>
-                    <input type="text" placeholder="Cargo desempeñado" className="input"
-                        value={persona.cargo}
-                        onChange={(e) => setpersona({...persona, cargo: e.target.value})}/>
-                </div>
-                <div className="grupo">
-                    <label>Tiempo de Experiencia</label>
-                    <input type="text" placeholder="1 año" className="input"
-                        value={persona.experiencia}
-                        onChange={(e) => setpersona({...persona, experiencia: e.target.value})}/>
-                </div>
-                <div className="grupo">
-                    <label>Funciones Desempeñadas</label>
-                    <textarea  placeholder="Describa las funciones realizadas." className="input"
-                        value={persona.funciones}
-                        onChange={(e) => setpersona({...persona, funciones: e.target.value})}></textarea>
-                </div>
-                <div className="grupo">
-                    <label>Habilidades Tecnicas</label>
-                    <input  placeholder="HTML, CSS, JavaScrit..." className="input"
-                         value={nuevaHabilidad}
-                            onChange={(e) => setNuevaHabilidad(e.target.value)}/>
+                    <div className="botones">
+                        <button className="button" type="submit">Agregar Experiencia</button>
+                    </div>
+                </form>
+            </Modal>
+
+            {/* Lista de experiencias */}
+            <div className="lista-experiencias">
+                {(persona.experiencias || []).map((exp, indice) => (
+                    <div key={indice} className="tarjeta-experiencia" style={{ border: "1px solid #ccc", padding: "15px", borderRadius: "8px", marginBottom: "15px", position: "relative" }}>
+                        <h3>{exp.cargo} en <strong>{exp.empresa}</strong></h3>
+                        <p><strong>Tiempo:</strong> {exp.tiempo || "No especificado"}</p>
+                        <p><strong>Funciones:</strong> {exp.funciones || "No especificadas"}</p>
+                        <p><strong>Habilidades:</strong> {exp.habilidades || "No especificadas"}</p>
                         
-                            <button className="boton-curso" type="button" onClick={agregarHabilidad}>+</button>
-                </div>
-                {/*lista de habilidades*/}
+                        <div className="boton-eliminar" style={{ marginTop: "10px" }}>
+                            <button
+                                type="button" 
+                                className="eliminar"
+                                onClick={() => eliminarExperiencia(indice)}
+                            >
+                                Eliminar experiencia
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
-                <div className="lista-cursos">
-                    {
-                        persona.habilidades.map(
-                            (habilidades, indice) => (
-                            <div className="grupo">
-                                <div 
-                                    className="curso"
-                                    key = {indice}
-                                >
-                
-                                        {habilidades}
-                                    
-
-                                </div>
-                                <div className="boton-eliminar">
-                                    <button
-                                        type="button" className="eliminar"
-                                        onClick={() => eliminarHabilidad(indice)}
-                                    >
-                                        Eliminar
-                                    </button>
-                                </div>
-                            </div>
-                            )
-                        )
-                    }
-                </div>
-
-                <div  className="botones">
+            <form onSubmit={continuar}>
+                <div className="botones">
                     <div className="boton">
                         <button className="button" type="button" onClick={anterior}>Anterior</button>
                     </div>
@@ -131,7 +179,7 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }){
                 </div>
             </form>
         </div>
-    )    
+    );
 }
 
-export default FormularioExperiencia
+export default FormularioExperiencia;

@@ -8,15 +8,13 @@ import FormularioAcademico from './components/formularioAcademico'
 import FormularioExperiencia from './components/formularioExperiencia' 
 import Vista from './components/vista'
 
-
 function App() {
 
   const [paso, setPaso] = useState(1);
 
   const [persona, setPersona] = useState ({
-
-    //Datos academicos
-    foto:null,
+    // Datos personales
+    foto: null,
     nombre: "",
     edad: "",
     ciudad: "",
@@ -25,70 +23,61 @@ function App() {
     ficha: "",
     jornada: "Mañana",
 
-    //Datos de estudios
+    // Datos de estudios
     nivel: "Bachiller",
     institucion: "",
     titulo: "",
     anio: "",
     cursos: [],
 
-    //Datos de experiencia
-    empresa: "",
-    cargo: "",
-    experiencia: "",
-    funciones: "",
-    habilidades: [],
-
-
+    //Experiencia
+    experiencias: [], 
   })
 
   return (
     <>
-  <div className="interfaz-global">
-      <Header />
+      <div className="interfaz-global">
+        <Header />
 
-      <main className="seccion-principal">
-        <div className="contenedor">
-          {
-            paso == 1 && (
-              <Formulario 
-              persona = {persona}
-              setpersona = {setPersona}
-              siguiente = {() => setPaso(2)}
-              />
-          )}
-          
-          {paso === 2 && (
-              <FormularioAcademico 
+        <main className="seccion-principal">
+          <div className="contenedor">
+            {paso === 1 && (
+                <Formulario 
+                  persona = {persona}
+                  setpersona = {setPersona}
+                  siguiente = {() => setPaso(2)}
+                />
+            )}
+            
+            {paso === 2 && (
+                <FormularioAcademico 
+                  persona = {persona}
+                  setpersona = {setPersona}
+                  anterior ={() => setPaso(1)} 
+                  siguiente ={() => setPaso(3)} 
+                />
+            )}
+            
+            {paso === 3 && (
+                <FormularioExperiencia 
+                  persona = {persona}
+                  setpersona = {setPersona}
+                  anterior ={() => setPaso(2)}
+                  siguiente ={() => setPaso(4)}
+                />
+            )}
+
+            {paso === 4 && (
+              <Vista
                 persona = {persona}
-                setpersona = {setPersona}
-                anterior ={() => setPaso(1)} 
-                siguiente ={() => setPaso(3)} 
+                anterior ={() => setPaso(3)}
               />
             )}
-          
-          {paso === 3 && (
-              <FormularioExperiencia 
-                persona = {persona}
-                setpersona = {setPersona}
-                anterior ={() => setPaso(2)}
-                siguiente ={() => setPaso(4)}
-              />
-            )}
-
-          {paso === 4 && (
-            <Vista
-              persona = {persona}
-              anterior ={() => setPaso(3)}
-              
-            />
-          )}
-        </div>
-      </main>
-     
-      
-      <Footer />
-    </div>
+          </div>
+        </main>
+       
+        <Footer />
+      </div>
     </>
   )
 }
