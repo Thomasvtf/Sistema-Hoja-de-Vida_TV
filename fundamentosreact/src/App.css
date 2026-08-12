@@ -30,7 +30,7 @@ html, body {
   color: white;
 }
 
-input {
+.input {
   padding: 10px;
   margin-left: 20px;
   border-radius: 5px;
@@ -42,28 +42,22 @@ input {
   font-family:'Times New Roman', Times, serif;
 }
 
-select {
+.input2 {
   padding: 10px;
   margin-left: 20px;
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 200px;
-  margin-bottom: 20px;
+  height: 50px;
+  margin-bottom: 10px;
   background-color: #131313;
   color: white;
   font-family:'Times New Roman', Times, serif;
 }
 
-textarea {
-  padding: 10px;
-  margin-left: 20px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+.curso {
   width: 200px;
-  margin-bottom: 20px;
-  background-color: #131313;
-  color: white;
-  font-family:'Times New Roman', Times, serif;
+  margin-left: 40px;
 }
 
 label {
@@ -94,7 +88,7 @@ h1, h2 {
   font-family:Arial, Helvetica, sans-serif;
 }
 
-button {
+.button {
   padding: 10px 20px;
   background-color: #9c9c9c;
   color: rgb(0, 0, 0);
@@ -102,9 +96,10 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-family:Arial, Helvetica, sans-serif;
+  margin-bottom: 20px;
 }
 
-button:hover {
+.button:hover {
   padding: 10px 20px;
   background-color: #575757;
   color: rgb(0, 0, 0);
@@ -128,3 +123,65 @@ footer {
   border-radius: 100%;
 }
 
+.curso-agregar{
+  display: flex;
+  gap: 10px;
+}
+
+.boton-curso {
+  width: 75px;
+  height: 50px;
+  padding: 10px 15px;
+  background-color: #9c9c9c;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family:Arial, Helvetica, sans-serif;
+  margin-bottom: 20px;
+}
+
+.boton-curso:hover {
+  padding: 10px 15px;
+  height: 50px;
+  background-color: #169c05;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.botones {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.curso{
+  width: 500px;
+}
+
+.eliminar {
+  padding: 10px 9.5px;
+  height: 50px;
+  background-color: #be1111;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family:Arial, Helvetica, sans-serif;
+  margin-bottom: 20px;
+}
+
+.eliminar:hover {
+  padding: 10px 9.5px;
+  height: 50px;
+  background-color: #990f0f;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family:Arial, Helvetica, sans-serif;
+  margin-bottom: 20px;
+}

@@ -37,7 +37,7 @@ function App() {
     cargo: "",
     experiencia: "",
     funciones: "",
-    habilidades: "",
+    habilidades: [],
 
 
   })
@@ -79,6 +79,8 @@ function App() {
           {paso === 4 && (
             <Vista
               persona = {persona}
+              anterior ={() => setPaso(3)}
+              
             />
           )}
         </div>

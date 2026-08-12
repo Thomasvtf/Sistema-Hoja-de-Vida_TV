@@ -25,7 +25,7 @@ function Formulario({ persona, setpersona, siguiente }) {
 
                 <div className="grupo">
                     <label>Fotografía</label>
-                    <input type="file" accept="image/*"
+                    <input type="file" accept="image/*" className="input"
                     onChange={(e) => {
                         const archivo = e.target.files[0];
                         if (archivo) {
@@ -35,44 +35,44 @@ function Formulario({ persona, setpersona, siguiente }) {
                 />
                 </div>
                 <div className="grupo">
-                    <label>Nombre completo</label>
-                    <input type="text" placeholder="Ingrese su nombre completo"
+                    <label>Nombre completo</label> 
+                    <input type="text" placeholder="Ingrese su nombre completo" className="input"
                     value = {persona.nombre}
                     onChange={(e) => setpersona({...persona, nombre: e.target.value})}/>
                 </div>
                 <div className="grupo">
                     <label>Edad</label>
-                    <input type="number" placeholder="Ingrese su edad"
+                    <input type="number" placeholder="Ingrese su edad" className="input"
                     value = {persona.edad}
                     onChange = {(e) => setpersona({...persona, edad: e.target.value})}/>
                 </div>
                 <div className="grupo">
                     <label>Ciudad</label>
-                    <input type="text" placeholder="Ingrese su ciudad"
+                    <input type="text" placeholder="Ingrese su ciudad" className="input"
                     value = {persona.ciudad}
                     onChange = {(e) => setpersona({...persona, ciudad: e.target.value})}/>
                 </div>
                 <div className="grupo">
                     <label>Programa de formación</label>
-                    <input type="text" placeholder="Ejemplo: ADSO"
+                    <input type="text" placeholder="Ejemplo: ADSO" className="input"
                     value = {persona.programa}
                     onChange = {(e) => setpersona({...persona, programa: e.target.value})}/>
                 </div>
                 <div className="grupo">
                     <label>Correo electronico</label>
-                    <input type="email" placeholder="correo@ejemplo.com"
+                    <input type="email" placeholder="correo@ejemplo.com" className="input"
                     value = {persona.correo}
                     onChange = {(e) => setpersona({...persona, correo: e.target.value})}/>
                 </div>
                 <div className="grupo">
                     <label>Número de ficha</label>
-                    <input type="number" placeholder="Ingrese su número de ficha"
+                    <input type="number" placeholder="Ingrese su número de ficha" className="input"
                     value = {persona.ficha}
                     onChange = {(e) => setpersona({...persona, ficha: e.target.value})}/>
                 </div>
                 <div className="grupo">
                     <label>Jornada</label>
-                    <select name="jornada" id="jornada"
+                    <select name="jornada" id="jornada" className="input"
                         value={persona.jornada}
                         onChange={(e) => setpersona({...persona, jornada: e.target.value})}>
                         <option value="mañana">Mañana</option>
@@ -82,7 +82,7 @@ function Formulario({ persona, setpersona, siguiente }) {
                     </select>
                 </div>
                 <div className="boton">
-                    <button  type="submit">Continuar registro</button>
+                    <button className="button" type="submit">Continuar registro</button>
                 </div>
             </form>
         </div>
