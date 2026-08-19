@@ -186,3 +186,10 @@ footer {
   margin-bottom: 20px;
 }
 
+.error-texto {
+  color: red;
+  font-size: 15px;
+  display: block; 
+  margin-Bottom: 10px; 
+  padding-Left: 200px;
+}

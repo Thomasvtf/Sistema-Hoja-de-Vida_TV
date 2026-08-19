@@ -1,26 +1,51 @@
 import { useState } from "react";
-import Modal from "./Modal"; // Asegúrate de ajustar la ruta de tu componente Modal
+import Modal from "./Modal";
 
 function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
-    //controlar el Modal
+    // Controlar el Modal
     const [modalAbierto, setModalAbierto] = useState(false);
 
+    // Estados para los campos temporales del modal
     const [empresa, setEmpresa] = useState("");
     const [cargo, setCargo] = useState("");
     const [experiencia, setExperiencia] = useState("");
     const [funciones, setFunciones] = useState("");
-    const [habilidadesLocal, setHabilidadesLocal] = useState(""); // Guarda el texto temporal de habilidades
+    const [habilidadesLocal, setHabilidadesLocal] = useState("");
 
-    //guardar toda la experiencia
+    // Estados de error separados para el formulario general y para el modal
+    const [errorGeneral, setErrorGeneral] = useState("");
+    const [errorModal, setErrorModal] = useState({});
+
+    // Guardar toda la experiencia laboral desde el Modal
     const guardarExperienciaTotal = (e) => {
-        e.preventDefault(); // Previene que el formulario del modal recargue la página
+        e.preventDefault();
+        
+        const erroresNuevosModal = {};
 
-        if (empresa.trim() === "" || cargo.trim() === "") {
-            alert("Por favor ingrese al menos la Empresa y el Cargo.");
-            return;
+        // 1. VALIDACIONES AGREGADAS EN REACT PARA TODOS LOS CAMPOS DEL MODAL
+        if (!empresa.trim()) {
+            erroresNuevosModal.empresa = "El nombre de la empresa es obligatorio.";
+        }
+        if (!cargo.trim()) {
+            erroresNuevosModal.cargo = "El cargo desempeñado es obligatorio.";
+        }
+        if (!experiencia.trim()) {
+            erroresNuevosModal.experiencia = "El tiempo de experiencia es obligatorio (Ej: 1 año).";
+        }
+        if (!funciones.trim()) {
+            erroresNuevosModal.funciones = "Las funciones desempeñadas son obligatorias.";
+        }
+        if (!habilidadesLocal.trim()) {
+            erroresNuevosModal.habilidades = "Debe ingresar al menos una habilidad técnica.";
         }
 
-        //objeto de experiencia laboral
+        // Si hay algún error, guardamos el estado y frenamos el registro
+        if (Object.keys(erroresNuevosModal).length > 0) {
+            setErrorModal(erroresNuevosModal);
+            return; 
+        }
+
+        // Objeto de experiencia laboral válido
         const nuevaExperiencia = {
             empresa: empresa.trim(),
             cargo: cargo.trim(),
@@ -32,16 +57,19 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
         setpersona({
             ...persona,
             experiencias: [
-                ...(persona.experiences || persona.experiencias || []),
+                ...(persona.experiencias || []),
                 nuevaExperiencia
             ]
         });
 
+        // Limpieza de campos del modal
         setEmpresa("");
         setCargo("");
         setExperiencia("");
         setFunciones("");
         setHabilidadesLocal("");
+        setErrorModal({}); 
+        setErrorGeneral("");
 
         // Cerrar el modal
         setModalAbierto(false);
@@ -59,38 +87,53 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
         });
     };
 
+    // Control del botón siguiente (Formulario General)
     const continuar = (e) => {
         e.preventDefault();
+        
         if ((persona.experiencias || []).length === 0) {
-            alert("Por favor agregue al menos una experiencia laboral antes de continuar.");
+            setErrorGeneral("Por favor agregue al menos una experiencia laboral antes de continuar.");
             return;
         }
+
+        setErrorGeneral("");
         alert("Registro completado correctamente");
         if (siguiente) {
             siguiente();
         }
     };
 
+    // 2. FUNCIONES AUXILIARES PARA LIMPIAR ERRORES EN TIEMPO REAL AL ESCRIBIR
+    const handleInputChangeModal = (campo, valor, setCampoState) => {
+        setCampoState(valor);
+        if (errorModal[campo]) {
+            setErrorModal({ ...errorModal, [campo]: "" });
+        }
+    };
+
     return (
         <div className="formulario">
             <h2>Experiencia Laboral</h2>
-                <div className="botones">
-                    <button 
-                        type="button" 
-                        className="button" 
-                        onClick={() => setModalAbierto(true)}
-                    >
-                        + Añadir Experiencia Laboral
-                    </button>
-                </div>
+            <div className="botones">
+                <button 
+                    type="button" 
+                    className="button" 
+                    onClick={() => setModalAbierto(true)}
+                >
+                    + Añadir Experiencia Laboral
+                </button>
+            </div>
      
-            {/*Modal*/}
+            {/* Modal */}
             <Modal 
                 isOpen={modalAbierto} 
-                onClose={() => setModalAbierto(false)} 
+                onClose={() => {
+                    setModalAbierto(false);
+                    setErrorModal({}); 
+                }} 
                 titulo="Registrar Experiencia"
             >
-                <form onSubmit={guardarExperienciaTotal}>
+                <form onSubmit={guardarExperienciaTotal} noValidate>
                     <div className="grupo">
                         <label>Empresa</label>
                         <input 
@@ -98,19 +141,23 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
                             placeholder="Nombre de la empresa" 
                             className="input"
                             value={empresa}
-                            onChange={(e) => setEmpresa(e.target.value)}
+                            onChange={(e) => handleInputChangeModal("empresa", e.target.value, setEmpresa)}
                         />
                     </div>
+                    {errorModal.empresa && <span className="error-texto">{errorModal.empresa}</span>}
+
                     <div className="grupo">
                         <label>Cargo</label>
                         <input 
                             type="text" 
                             placeholder="Cargo desempeñado" 
                             className="input"
-                            value={cargo}
-                            onChange={(e) => setCargo(e.target.value)}
+                            value={cargo} 
+                            onChange={(e) => handleInputChangeModal("cargo", e.target.value, setCargo)}
                         />
                     </div>
+                    {errorModal.cargo && <span className="error-texto">{errorModal.cargo}</span>}
+
                     <div className="grupo">
                         <label>Tiempo de Experiencia</label>
                         <input 
@@ -118,42 +165,50 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
                             placeholder="Ej: 1 año" 
                             className="input"
                             value={experiencia}
-                            onChange={(e) => setExperiencia(e.target.value)}
+                            onChange={(e) => handleInputChangeModal("experiencia", e.target.value, setExperiencia)}
                         />
                     </div>
+                    {/* Error de Tiempo de Experiencia */}
+                    {errorModal.experiencia && <span className="error-texto">{errorModal.experiencia}</span>}
+
                     <div className="grupo">
                         <label>Funciones Desempeñadas</label>
                         <textarea  
                             placeholder="Describa las funciones realizadas." 
                             className="input"
                             value={funciones}
-                            onChange={(e) => setFunciones(e.target.value)}
+                            onChange={(e) => handleInputChangeModal("funciones", e.target.value, setFunciones)}
                         ></textarea>
                     </div>
+                    {/* Error de Funciones */}
+                    {errorModal.funciones && <span className="error-texto">{errorModal.funciones}</span>}
+
                     <div className="grupo">
                         <label>Habilidades Técnicas</label>
                         <input  
                             placeholder="HTML, CSS, JavaScript..." 
                             className="input"
                             value={habilidadesLocal}
-                            onChange={(e) => setHabilidadesLocal(e.target.value)}
+                            onChange={(e) => handleInputChangeModal("habilidades", e.target.value, setHabilidadesLocal)}
                         />
                     </div>
+                    {/* Error de Habilidades */}
+                    {errorModal.habilidades && <span className="error-texto">{errorModal.habilidades}</span>}
 
-                    <div className="botones">
+                    <div className="botones" style={{ marginTop: "15px" }}>
                         <button className="button" type="submit">Agregar Experiencia</button>
                     </div>
                 </form>
             </Modal>
 
             {/* Lista de experiencias */}
-            <div className="lista-experiencias">
+            <div className="lista-experiencias" style={{ marginTop: "20px" }}>
                 {(persona.experiencias || []).map((exp, indice) => (
                     <div key={indice} className="tarjeta-experiencia" style={{ border: "1px solid #ccc", padding: "15px", borderRadius: "8px", marginBottom: "15px", position: "relative" }}>
                         <h3>{exp.cargo} en <strong>{exp.empresa}</strong></h3>
-                        <p><strong>Tiempo:</strong> {exp.tiempo || "No especificado"}</p>
-                        <p><strong>Funciones:</strong> {exp.funciones || "No especificadas"}</p>
-                        <p><strong>Habilidades:</strong> {exp.habilidades || "No especificadas"}</p>
+                        <p><strong>Tiempo:</strong> {exp.tiempo}</p>
+                        <p><strong>Funciones:</strong> {exp.funciones}</p>
+                        <p><strong>Habilidades:</strong> {exp.habilidades}</p>
                         
                         <div className="boton-eliminar" style={{ marginTop: "10px" }}>
                             <button
@@ -168,7 +223,9 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
                 ))}
             </div>
 
-            <form onSubmit={continuar}>
+            {errorGeneral && <span className="error-texto" style={{ textAlign: "center", marginBottom: "15px" }}>{errorGeneral}</span>}
+
+            <form onSubmit={continuar} noValidate>
                 <div className="botones">
                     <div className="boton">
                         <button className="button" type="button" onClick={anterior}>Anterior</button>
