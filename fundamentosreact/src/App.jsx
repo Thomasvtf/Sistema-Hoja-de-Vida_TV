@@ -34,6 +34,41 @@ function App() {
     experiencias: [], 
   })
 
+  //Conectar reat con flask
+  const guardar_hoja_vida = async() => {
+    try{
+
+      const datosapi = {
+        nombre:persona.nombre,
+        edad:persona.edad,
+        ciudad:persona.ciudad,
+        correo:persona.correo,
+        fotografia:persona.fotografia,
+        programa:persona.programa,
+        ficha:persona.ficha,
+        jornada:persona.jornada
+      };
+
+      const respuesta = await fetch(
+        "http://127.0.0.1:5000/api/registro-hoja-vida",
+        {
+          methods: "POST",
+          headers:{"Content-Type":"application/json"},
+
+          body: JSON.stringify(datos_api)
+        }
+      );
+
+      const resultado = await respuesta.json();
+
+      console.log("Respuesta realizada", resultado);
+
+
+    }catch(error){
+      console.error("error al conectar con flask",error);
+    }
+  };
+
   return (
     <>
       <div className="interfaz-global">
@@ -70,6 +105,7 @@ function App() {
             {paso === 4 && (
               <Vista
                 persona = {persona}
+                guardar_hoja_Vida = {guardar_hoja_vida}
                 anterior ={() => setPaso(3)}
               />
             )}
