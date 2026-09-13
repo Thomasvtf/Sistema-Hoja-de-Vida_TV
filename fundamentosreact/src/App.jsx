@@ -10,6 +10,8 @@ import Vista from './components/vista'
 
 function App() {
 
+  const [idHojaVida, setIdHojaVida] = useState(null);
+
   const [paso, setPaso] = useState(1);
 
   const [persona, setPersona] = useState ({
@@ -35,39 +37,102 @@ function App() {
   })
 
   //Conectar reat con flask
-  const guardar_hoja_vida = async() => {
-    try{
-
-      const datos_api = {
-        nombre:persona.nombre,
-        edad:persona.edad,
-        ciudad:persona.ciudad,
-        correo:persona.correo,
-        fotografia:persona.foto,
-        programa:persona.programa,
-        ficha:persona.ficha,
-        jornada:persona.jornada
+  // Conectar react con flask
+  const confirmar_registro = async() => {
+    try {
+      const datos_hoja = {
+        nombre: persona.nombre,
+        edad: persona.edad,
+        ciudad: persona.ciudad,
+        correo: persona.correo,
+        fotografia: persona.foto,
+        programa: persona.programa,
+        ficha: persona.ficha,
+        jornada: persona.jornada
       };
 
-      const respuesta = await fetch(
+      const respHoja = await fetch(
         "http://127.0.0.1:5000/api/registro-hoja-vida",
         {
           method: "POST",
-          headers:{"Content-Type":"application/json"},
-
-          body: JSON.stringify(datos_api)
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(datos_hoja)
         }
       );
 
-      const resultado = await respuesta.json();
+      if (!respHoja.ok) {
+        const errorHoja = await respHoja.json();
+        alert("Error al guardar los datos personales: " + errorHoja.Mensaje);
+        return;
+      }
 
-      console.log("Respuesta realizada", resultado);
+      const resultadoHoja = await respHoja.json();
 
+      // Buscamos el ID ya sea que se llame 'id' o 'id_generado' o 'id_hoja_vida'
+      const idReal = resultadoHoja.id || resultadoHoja.id_generado || resultadoHoja.id_hoja_vida; 
+      console.log("ID detectado y rescatado en React:", idReal);
 
-    }catch(error){
-      console.error("error al conectar con flask",error);
+      // Si después de buscar en todas las opciones sigue sin existir, detenemos el proceso
+      if (!idReal) {
+        alert("El servidor registró la hoja de vida, pero no pudimos recuperar el ID numérico. Revisa la consola del navegador.");
+        return;
+      }
+
+      // Actualizamos el estado para que quede guardado en el componente
+      setIdHojaVida(idReal); 
+
+      const datos_estudios = {
+        nivel: persona.nivel,
+        institucion: persona.institucion,
+        titulo: persona.titulo,
+        anio_graduacion: persona.anio, // Pasamos la clave que espera tu backend
+        id_hoja_vida: idReal 
+      };
+
+      // Enviamos la petición de estudios usando la URL dinámica correcta
+      const respEstudios = await fetch(`http://127.0.0.1:5000/api/registro-estudios/${idReal}`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(datos_estudios)
+      });
+
+      if (respEstudios.ok) {
+        const resultadoEstudios = await respEstudios.json();
+        console.log("Estudios guardados exitosamente:", resultadoEstudios);
+        alert("¡Registro completado con éxito! Hoja de vida y estudios vinculados.");
+      } else {
+        const errorEstudios = await respEstudios.json();
+        console.log("Error detallado de estudios:", errorEstudios);
+        alert("Se creó la hoja de vida, pero hubo un error al guardar los estudios asociados.");
+      }
+
+      const datos_cursos = {
+        hoja_vida_id: idReal,
+        nombre: persona.cursos[0] || "Curso sin nombre"
+      } 
+
+      const respCursos = await fetch(`http://127.0.0.1:5000/api/registro-curso/${idReal}`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(datos_cursos)
+      });
+
+      if (respCursos.ok) {
+        const resultadoCursos = await respCursos.json();
+        console.log("Cursos guardados exitosamente:", resultadoCursos);
+      } else {
+        const errorCursos = await respCursos.json();
+        console.log("Error detallado de cursos:", errorCursos);
+        alert("Se creó la hoja de vida, pero hubo un error al guardar los cursos asociados.");
+      }
+
+    } catch(error) {
+      console.error("Error crítico al conectar con Flask:", error);
+      alert("Hubo un error de red al intentar conectar con el servidor.");
     }
   };
+
+
 
   return (
     <>
@@ -105,7 +170,7 @@ function App() {
             {paso === 4 && (
               <Vista
                 persona = {persona}
-                guardar_hoja_Vida = {guardar_hoja_vida}
+                confirmar_registro = {confirmar_registro}
                 anterior ={() => setPaso(3)}
               />
             )}

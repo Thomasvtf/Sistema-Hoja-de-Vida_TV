@@ -1,4 +1,4 @@
-function Vista ({ persona, anterior, guardar_hoja_Vida }) {
+function Vista ({ persona, anterior, confirmar_registro}) {
     return (
         <div className="vista">
             <h2>Vista previa</h2>
@@ -74,7 +74,7 @@ function Vista ({ persona, anterior, guardar_hoja_Vida }) {
                 </div>
                 
                 <div className="boton">
-                    <button className="button" type="submit" onClick={guardar_hoja_Vida}>Confirmar Registro</button>
+                    <button className="button" type="submit" onClick={confirmar_registro}>Confirmar Registro</button>
                 </div>
             </div>
         </div>
