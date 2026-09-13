@@ -38,12 +38,12 @@ function App() {
   const guardar_hoja_vida = async() => {
     try{
 
-      const datosapi = {
+      const datos_api = {
         nombre:persona.nombre,
         edad:persona.edad,
         ciudad:persona.ciudad,
         correo:persona.correo,
-        fotografia:persona.fotografia,
+        fotografia:persona.foto,
         programa:persona.programa,
         ficha:persona.ficha,
         jornada:persona.jornada
@@ -52,7 +52,7 @@ function App() {
       const respuesta = await fetch(
         "http://127.0.0.1:5000/api/registro-hoja-vida",
         {
-          methods: "POST",
+          method: "POST",
           headers:{"Content-Type":"application/json"},
 
           body: JSON.stringify(datos_api)
