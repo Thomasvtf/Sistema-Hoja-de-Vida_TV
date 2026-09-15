@@ -85,7 +85,7 @@ function App() {
         nivel: persona.nivel,
         institucion: persona.institucion,
         titulo: persona.titulo,
-        anio_graduacion: persona.anio, // Pasamos la clave que espera tu backend
+        anio_graduacion: persona.anio,
         id_hoja_vida: idReal 
       };
 
@@ -106,9 +106,17 @@ function App() {
         alert("Se creó la hoja de vida, pero hubo un error al guardar los estudios asociados.");
       }
 
+      //Guardar cursos
+      const lista_cursos = persona.cursos.map(curso =>{
+        if (typeof curso === 'object' && curso !== null){
+          return curso.nombre || "";
+        }
+        return curso;
+      }).filter(Boolean);
+
       const datos_cursos = {
-        hoja_vida_id: idReal,
-        nombre: persona.cursos[0] || "Curso sin nombre"
+        cursos:lista_cursos,
+        id_hoja_vida: idReal
       } 
 
       const respCursos = await fetch(`http://127.0.0.1:5000/api/registro-curso/${idReal}`, {
