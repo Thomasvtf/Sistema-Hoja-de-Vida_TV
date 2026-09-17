@@ -45,6 +45,13 @@ function Vista ({ persona, anterior, confirmar_registro}) {
 
             {/* --- SECCIÓN 3: DATOS DE EXPERIENCIA (ACTUALIZADO) --- */}
             <h4 className="text-center">Datos de Experiencia Laboral</h4>
+
+            <div className="detalle">
+                <strong>Habilidades</strong>
+            </div>
+            {(persona.habilidades || []).map((habilidad, indice) => (
+                <p key={indice}>- {habilidad}</p>
+            ))}
             
             {/* CORREGIDO: Mapeamos el arreglo de experiencias para mostrar todas las tarjetas registradas */}
 

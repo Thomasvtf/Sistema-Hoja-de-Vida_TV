@@ -10,11 +10,15 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
     const [cargo, setCargo] = useState("");
     const [experiencia, setExperiencia] = useState("");
     const [funciones, setFunciones] = useState("");
-    const [habilidadesLocal, setHabilidadesLocal] = useState("");
+
+    const [nuevaHabilidad, setNuevaHabilidad] = useState("");
 
     // Estados de error separados para el formulario general y para el modal
     const [errorGeneral, setErrorGeneral] = useState("");
+    const [error, setError] = useState({});
     const [errorModal, setErrorModal] = useState({});
+
+    
 
     // Guardar toda la experiencia laboral desde el Modal
     const guardarExperienciaTotal = (e) => {
@@ -35,25 +39,24 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
         if (!funciones.trim()) {
             erroresNuevosModal.funciones = "Las funciones desempeñadas son obligatorias.";
         }
-        if (!habilidadesLocal.trim()) {
-            erroresNuevosModal.habilidades = "Debe ingresar al menos una habilidad técnica.";
-        }
 
+        
         // Si hay algún error, guardamos el estado y frenamos el registro
         if (Object.keys(erroresNuevosModal).length > 0) {
             setErrorModal(erroresNuevosModal);
             return; 
         }
-
+        
+        
+        
         // Objeto de experiencia laboral válido
         const nuevaExperiencia = {
             empresa: empresa.trim(),
             cargo: cargo.trim(),
             tiempo: experiencia.trim(),
             funciones: funciones.trim(),
-            habilidades: habilidadesLocal.trim() 
         };
-
+        
         setpersona({
             ...persona,
             experiencias: [
@@ -67,13 +70,32 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
         setCargo("");
         setExperiencia("");
         setFunciones("");
-        setHabilidadesLocal("");
+        ("");
         setErrorModal({}); 
         setErrorGeneral("");
 
         // Cerrar el modal
         setModalAbierto(false);
     };
+
+
+    // Agregar habilidad
+    const agregarHabilidad = () => {
+        if (nuevaHabilidad.trim() === "") {
+                alert("Ingrese el nombre de la habilidad.");
+                return;
+            }
+        
+            setpersona ({
+                ...persona,
+                habilidades: [...persona.habilidades, nuevaHabilidad]
+            });
+            setNuevaHabilidad("");
+
+            if (error.habilidades) {
+                setError({ ...error, habilidades: "" });
+            }
+        };
 
     // Eliminar experiencia 
     const eliminarExperiencia = (indice) => {
@@ -87,17 +109,41 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
         });
     };
 
-    // Control del botón siguiente (Formulario General)
+    // Eliminar habilidad
+    const eliminarHabilidad = (indice) => {
+        const habilidadesActualizadas = persona.habilidades.filter((_, i) => i !== indice);
+        setpersona({
+            ...persona,
+            habilidades: habilidadesActualizadas
+        });
+    };
+
+        // Control del botón siguiente (Formulario General)
     const continuar = (e) => {
         e.preventDefault();
-        
-        if ((persona.experiencias || []).length === 0) {
-            setErrorGeneral("Por favor agregue al menos una experiencia laboral antes de continuar.");
+
+        // Validar habilidades
+        if (!persona.habilidades || persona.habilidades.length === 0) {
+            setError({
+                habilidades: "Debes agregar al menos una habilidad."
+            });
             return;
         }
 
+        // Validar experiencia
+        if (!persona.experiencias || persona.experiencias.length === 0) {
+            setErrorGeneral(
+                "Por favor agregue al menos una experiencia laboral antes de continuar."
+            );
+            return;
+        }
+
+        // Si todo está correcto
+        setError({});
         setErrorGeneral("");
+
         alert("Registro completado correctamente");
+
         if (siguiente) {
             siguiente();
         }
@@ -183,23 +229,48 @@ function FormularioExperiencia({ persona, setpersona, anterior, siguiente }) {
                     {/* Error de Funciones */}
                     {errorModal.funciones && <span className="error-texto">{errorModal.funciones}</span>}
 
-                    <div className="grupo">
-                        <label>Habilidades Técnicas</label>
-                        <input  
-                            placeholder="HTML, CSS, JavaScript..." 
-                            className="input"
-                            value={habilidadesLocal}
-                            onChange={(e) => handleInputChangeModal("habilidades", e.target.value, setHabilidadesLocal)}
-                        />
-                    </div>
-                    {/* Error de Habilidades */}
-                    {errorModal.habilidades && <span className="error-texto">{errorModal.habilidades}</span>}
+    
+
 
                     <div className="botones" style={{ marginTop: "15px" }}>
                         <button className="button" type="submit">Agregar Experiencia</button>
                     </div>
                 </form>
             </Modal>
+
+            <div className="grupo">
+                    <div>
+                        <label>Habilidades</label>
+                    </div>
+                
+                    <div className="curso-agregar">
+                        <input className="input2" type="text" placeholder="Ejemplo: Creativo"
+                            value={nuevaHabilidad}
+                            onChange={(e) => setNuevaHabilidad(e.target.value)}/>
+                    
+                        <button className="boton-curso" type="button" onClick={agregarHabilidad}>+</button>
+                    </div>
+            </div>
+                {error.habilidades && <span className="error-texto">{error.habilidades}</span>}
+
+                {/* Lista de habilidades */}
+                <div className="lista-habilidades">
+                    {persona.habilidades?.map((habilidad, indice) => (
+                        <div className="grupo" key={indice}>
+                            <div className="curso">
+                                {habilidad}
+                            </div>
+                            <div className="boton-eliminar">
+                                <button
+                                    type="button" className="eliminar"
+                                    onClick={() => eliminarHabilidad(indice)}
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
             {/* Lista de experiencias */}
             <div className="lista-experiencias" style={{ marginTop: "20px" }}>

@@ -34,6 +34,7 @@ function App() {
 
     //Experiencia
     experiencias: [], 
+    habilidades: [],
   })
 
   //Conectar reat con flask
