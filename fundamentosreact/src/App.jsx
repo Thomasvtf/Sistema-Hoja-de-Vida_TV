@@ -135,6 +135,28 @@ function App() {
         alert("Se creó la hoja de vida, pero hubo un error al guardar los cursos asociados.");
       }
 
+      const datos_experiencias = {
+          hoja_vida_id: idReal,
+          experiencias:persona.experiencias,
+      };
+
+      const respExperiencias = await fetch (`http://127.0.0.1:5000/api/registro-experiencia/${idReal}`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body:JSON.stringify(datos_experiencias)
+      });
+
+      if (respExperiencias.ok) {
+        const resultadoExperiencias = await respExperiencias.json();
+        console.log("Experiencias guardadas exitosamente:", resultadoExperiencias);
+      } else{
+        const errorExperiencias = await respExperiencias.json();
+        console.log("Error detallado experiencias:", errorExperiencias)
+        alert("Se creó la hoja de vida, pero hubo un error al guardar las experiencias asociadas.");
+      }
+
+      
+
     } catch(error) {
       console.error("Error crítico al conectar con Flask:", error);
       alert("Hubo un error de red al intentar conectar con el servidor.");

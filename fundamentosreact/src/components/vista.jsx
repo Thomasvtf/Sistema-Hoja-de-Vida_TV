@@ -70,7 +70,6 @@ function Vista ({ persona, anterior, confirmar_registro}) {
                         <h5><strong>{indice + 1}. {exp.cargo}</strong> en <em>{exp.empresa}</em></h5>
                         <p style={{ margin: "4px 0" }}><strong>Tiempo:</strong> {exp.tiempo || "No especificado"}</p>
                         <p style={{ margin: "4px 0" }}><strong>Funciones:</strong> {exp.funciones || "No especificadas"}</p>
-                        <p style={{ margin: "4px 0" }}><strong>Habilidades:</strong> {exp.habilidades || "No especificadas"}</p>
                     </div>
                 ))
             }
