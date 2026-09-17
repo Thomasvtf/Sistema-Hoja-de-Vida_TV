@@ -11,6 +11,7 @@ import Vista from './components/vista'
 function App() {
 
   const [idHojaVida, setIdHojaVida] = useState(null);
+  const [idExp, setIdExp] = useState(null);
 
   const [paso, setPaso] = useState(1);
 
@@ -70,7 +71,7 @@ function App() {
       const resultadoHoja = await respHoja.json();
 
       // Buscamos el ID ya sea que se llame 'id' o 'id_generado' o 'id_hoja_vida'
-      const idReal = resultadoHoja.id || resultadoHoja.id_generado || resultadoHoja.id_hoja_vida; 
+      const idReal = resultadoHoja.id; 
       console.log("ID detectado y rescatado en React:", idReal);
 
       // Si después de buscar en todas las opciones sigue sin existir, detenemos el proceso
@@ -146,16 +147,47 @@ function App() {
         body:JSON.stringify(datos_experiencias)
       });
 
-      if (respExperiencias.ok) {
-        const resultadoExperiencias = await respExperiencias.json();
-        console.log("Experiencias guardadas exitosamente:", resultadoExperiencias);
-      } else{
+      if (!respExperiencias.ok) {
         const errorExperiencias = await respExperiencias.json();
         console.log("Error detallado experiencias:", errorExperiencias)
         alert("Se creó la hoja de vida, pero hubo un error al guardar las experiencias asociadas.");
       }
 
       
+      const resultadoExperiencias = await respExperiencias.json();
+      
+
+      const idEx = resultadoExperiencias.id;
+      console.log("ID detectado y rescatado en React:", idEx);
+
+
+      if (!idEx) {
+        alert("El servidor registró la experiencia, pero no pudimos recuperar el ID numérico. Revisa la consola del navegador.");
+        return;
+      }
+
+      setIdExp(idEx);
+
+
+      const datos_habilidades = {
+        experiencias_id: idEx,
+        habilidades:persona.habilidades,
+      };
+
+      const respHabilidades = await fetch(`http://127.0.0.1:5000/api/registro-habilidad/${idEx}`,{
+        method: "POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(datos_habilidades)
+      });
+
+      if (respHabilidades.ok){
+        const resultadoHabilidades = await respHabilidades.json();
+        console.log("Habiliddades guardadas exitosamente", resultadoHabilidades)
+      } else{
+        const errorHabilidades = await respHabilidades.json();
+        console.log("Error detallado habilidades:", errorHabilidades)
+        alert("Se creó la experiencia, pero hubo un error al guardar las habilidades asociadas.")
+      }
 
     } catch(error) {
       console.error("Error crítico al conectar con Flask:", error);
