@@ -1,14 +1,28 @@
-import { useState } from "react"
+import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
-import Header from './components/header'
-import Formulario from './components/formulario'
-import Footer from './components/footer' 
-import FormularioAcademico from './components/formularioAcademico' 
-import FormularioExperiencia from './components/formularioExperiencia' 
-import Vista from './components/vista'
+import './App.css';
+import Header from './components/header';
+import Formulario from './components/formulario';
+import Footer from './components/footer';
+import FormularioAcademico from './components/formularioAcademico';
+import FormularioExperiencia from './components/formularioExperiencia';
+import Vista from './components/vista';
+import Login from './components/Login';
+import { cerrarSesion } from "./services/api";
 
 function App() {
+
+  //Estado de autentificar el usuario
+    const [usuario, setUsuario] = useState(() =>{
+    const guardado = localStorage.getItem("usaurio");
+    return guardado ? JSON.parse(guardado): null;
+  });
+
+  const salir = () =>{
+    cerrarSesion();
+    setUsuario(null);
+    setPaso(1);
+  }
 
   const [idHojaVida, setIdHojaVida] = useState(null);
   const [idExp, setIdExp] = useState(null);
@@ -199,9 +213,14 @@ function App() {
 
   return (
     <>
-      <div className="interfaz-global">
-        <Header />
+      <div className="interfaz-global">        
+        
+        {usuario ? (
+          <Login onlogin={setUsuario}/>
 
+        )usuario.rol = "aprendiz" ? ()}
+
+        <Header />
         <main className="seccion-principal">
           <div className="contenedor">
             {paso === 1 && (
